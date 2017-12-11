@@ -6,13 +6,12 @@ Transform:
 Parameters:
   ProjectId:
     Type: String
-    Description: AWS CodeStar projectID used to associate new resources to team members
-
+    Description: Time Function
 Resources:
-  GetHelloWorld:
+  TimeResouce:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: index.get
+      Handler: index.handler
       Runtime: nodejs4.3
       Role:
         Fn::ImportValue:
@@ -21,5 +20,19 @@ Resources:
         GetEvent:
           Type: Api
           Properties:
-            Path: /
+            Path: /TimeResource
             Method: get
+  TimeOptionsResouce:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.options
+      Runtime: nodejs4.3
+      Role:
+        Fn::ImportValue:
+          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
+      Events:
+        OptionsEvent:
+          Type: Api
+          Properties:
+            Path: /TimeResource
+            Method: options
